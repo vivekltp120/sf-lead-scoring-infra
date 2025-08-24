@@ -4,6 +4,8 @@ on:
   push:
     branches: [ main ]
   pull_request:
+    branches: [ main, develop, feature/* ]
+    
 
 jobs:
   build-test-scan:
@@ -78,7 +80,7 @@ jobs:
 
   # Example deploy job (needs AWS OIDC configuration & env secrets)
   deploy-staging:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/main'
     needs: build-test-scan
     runs-on: ubuntu-latest
     permissions:

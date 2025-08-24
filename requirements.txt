@@ -13,6 +13,6 @@ ruff==0.6.4
 bandit==1.7.9
 types-requests==2.32.0.20240712
 locust==2.39.0
-watchtower==1.0.9
+watchtower
 # Optional locally; in AWS container image as needed
 # snowflake-connector-python

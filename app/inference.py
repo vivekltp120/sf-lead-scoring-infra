@@ -5,7 +5,7 @@ import os, json, joblib, numpy as np
 MODEL_FILENAME = 'xgboost_model.json'
 
 def model_fn(model_dir):
-    path = os.path.join(model_dir, "model.pkl")
+    path = os.path.join(model_dir, MODEL_FILENAME = 'xgboost_model.json')
     return joblib.load(path)
 
 def input_fn(body, content_type):

@@ -25,7 +25,7 @@ resource "null_resource" "package_lambda" {
 resource "aws_lambda_function" "lead_scoring" {
   function_name    = "lead_scorer"
   role             = aws_iam_role.lambda_exec.arn
-  handler          = "app.handler"
+  handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
 
   filename         = "${path.module}/lambda_package.zip"

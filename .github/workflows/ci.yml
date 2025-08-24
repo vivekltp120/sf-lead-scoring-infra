@@ -14,17 +14,16 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Install aws-cli
+      - name: Install aws-cli  
         run: |
           curl -s "https://aws-cli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "aws-cli.zip"
-          unzip aws-cli.zip /tmp
-          sudo ./tmp/aws/install --update
-          rm -rf aws-cli.zip aws-/tmp
+          unzip aws-cli.zip 
+          sudo ./aws/install --update
+          rm -rf aws-cli.zip ./aws
       - name: Set up AWS credentials
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

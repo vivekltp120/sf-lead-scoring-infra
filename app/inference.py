@@ -2,10 +2,10 @@
 import os, json, joblib, numpy as np
 
 # A recommended filename for the XGBoost model within the tarball is 'xgboost_model.json'
-MODEL_FILENAME = 'xgboost_model.json'
+MODEL_FILENAME = 'xgboost_model'
 
 def model_fn(model_dir):
-    path = os.path.join(model_dir, MODEL_FILENAME = 'xgboost_model.json')
+    path = os.path.join(model_dir, MODEL_FILENAME)
     return joblib.load(path)
 
 def input_fn(body, content_type):

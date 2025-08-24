@@ -1,6 +1,6 @@
 # deploy.py
 import boto3, sagemaker, time
-from sagemaker.sklearn.model import SKLearnModel
+from sagemaker.xgboost.model import XGBoostModel
 from utils import get_logger
 logger = get_logger("deploy_service")
 
@@ -8,12 +8,16 @@ sm = boto3.client("sagemaker")
 asg = boto3.client("application-autoscaling")
 
 role = "arn:aws:iam::947288527335:role/sagemaker"
-model = SKLearnModel(
+
+model = XGBoostModel(
     model_data="s3://salesforce-models/models/xgboost_model.tar.gz",
     role=role,
-    entry_point="app/inference.py",
-    framework_version="1.2-1",
+    entry_point="inference.py",   # only if you have custom logic
+    framework_version="1.5-1"
 )
+
+
+
 
 endpoint_name = f"xgb-endpoint-{int(time.time())}"
 logger.info(f"Deploying endpoint: {endpoint_name}")

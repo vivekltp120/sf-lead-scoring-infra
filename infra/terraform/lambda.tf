@@ -42,7 +42,7 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
 
 resource "aws_apigatewayv2_route" "predict_route" {
   api_id    = aws_apigatewayv2_api.lead_scoring_api.id
-  route_key = "POST /predict"
+  route_key = "POST /score"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 

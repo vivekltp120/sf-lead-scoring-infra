@@ -173,7 +173,11 @@ resource "aws_lb_listener_rule" "http_forward" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.api.arn
   }
-  condition { path_pattern { values = ["/*"] } }
+  condition { 
+    path_pattern { 
+    values = ["/*"]
+    }
+  }
 }
 
 # CloudWatch Alarms (example)

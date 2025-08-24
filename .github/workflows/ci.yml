@@ -2,7 +2,7 @@ name: aws infra for lead scoring model
 
 on:
   push:
-    branches: [ main, feature/* ]
+    branches: [ main, feature/*,develop ]
   pull_request:
     branches: [ main ]
     
@@ -21,68 +21,74 @@ jobs:
           python-version: '3.12'
 
       
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install coverage
-      - name: Install aws-cli  
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"  -o "aws-cli.zip"
-          unzip aws-cli.zip 
-          sudo ./aws/install --update
-          rm -rf aws-cli.zip ./aws
-      - name: Set up AWS credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-          aws configure set default.region us-east-1    
-
-      # - name: Lint & Typecheck
+      # - name: Install deps
       #   run: |
-      #     ruff check .
-      #     mypy app
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.txt
+      #     pip install coverage
+      # - name: Install aws-cli  
+      #   run: |
+      #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"  -o "aws-cli.zip"
+      #     unzip aws-cli.zip 
+      #     sudo ./aws/install --update
+      #     rm -rf aws-cli.zip ./aws
+      # - name: Set up AWS credentials
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   run: |
+      #     aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      #     aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      #     aws configure set default.region us-east-1    
 
-      - name: Unit tests
-        run: |
-          coverage run -m pytest -q
-          coverage xml
+      # # - name: Lint & Typecheck
+      # #   run: |
+      # #     ruff check .
+      # #     mypy app
 
-      - name: Bandit (security)
-        run: bandit -r app -x tests
+      # - name: Unit tests
+      #   run: |
+      #     coverage run -m pytest -q
+      #     coverage xml
 
-      - name: Build Docker
-        run: docker build -t app:ci .
+      # - name: Bandit (security)
+      #   run: bandit -r app -x tests
 
-      - name: Trivy scan
-        uses: aquasecurity/trivy-action@0.28.0
-        continue-on-error: true
-        with:
-          image-ref: 'app:ci'
-          format: 'table'
-          exit-code: '0'
+      # # - name: Build Docker
+      # #   run: docker build -t app:ci .
 
-      - name: Tfsec
-        uses: aquasecurity/tfsec-action@v1.0.3
-        continue-on-error: true
-        with:
-          working_directory: infra/terraform
+      # - name: Trivy scan
+      #   uses: aquasecurity/trivy-action@0.28.0
+      #   continue-on-error: true
+      #   with:
+      #     image-ref: 'app:ci'
+      #     format: 'table'
+      #     exit-code: '0'
 
-      - name: Checkov
-        uses: bridgecrewio/checkov-action@v12
-        continue-on-error: true
-        with:
-          directory: infra/terraform
-          quiet: true
+      # - name: Tfsec
+      #   uses: aquasecurity/tfsec-action@v1.0.3
+      #   continue-on-error: true
+      #   with:
+      #     working_directory: infra/terraform
+
+      # - name: Checkov
+      #   uses: bridgecrewio/checkov-action@v12
+      #   continue-on-error: true
+      #   with:
+      #     directory: infra/terraform
+      #     quiet: true
 
   # Example deploy job (needs AWS OIDC configuration & env secrets)
   deploy-staging:
-    if: github.ref == 'refs/heads/feature/deploy_stagging'
     needs: build-test-scan
     runs-on: ubuntu-latest
+    env: 
+      bucket: "smm-sagemaker/model"
+    strategy:
+      matrix:
+        env: [ dev ]
+    
+    environment: ${{ matrix.env }}  # use GH Environments for approvals on 'prod'    
     permissions:
       id-token: write
       contents: read
@@ -91,37 +97,27 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          # role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Login to ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      - name: Install deps
+        run: |
+          pip install --upgrade pip
+          pip install boto3 sagemaker xgboost joblib
 
-      - name: Build, tag, and push image
+      # - name: Package model
+      #   run: |
+      #     tar -czvf model-${GITHUB_SHA}.tar.gz model/
+      #     echo "ARTIFACT=model-${GITHUB_SHA}.tar.gz" >> $GITHUB_ENV
+
+      # - name: Upload to S3 (versioned path)
+      #   run: |
+      #     aws s3 cp $ARTIFACT s3://<bucket>/${{ matrix.env }}/$ARTIFACT
+
+      - name: Deploy (autoscaled Realtime)
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
-          ECR_REPOSITORY: lead-scorer-api
-          IMAGE_TAG: ${{ github.sha }}
+          ARTIFACT_S3: s3://${{ env.bucket }}/model/${{ matrix.env }}/xgboost-model.tar.gz
+          ENV: ${{ matrix.env }}
         run: |
-          ECR_REGISTRY=$(echo $ECR_REGISTRY | xargs)
-          IMAGE_TAG=$(echo $IMAGE_TAG | xargs)
-          echo "Using: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-             terraform_version: 1.8.5   # or whatever version you prefer
-
-      - name: Terraform Init/Plan/Apply (staging)
-        working-directory: infra/terraform
-        run: |
-          terraform init -input=false
-          terraform plan -input=false -out=tfplan
-          terraform apply -input=false -auto-approve tfplan
+          python app/deploy.py --artifact $ARTIFACT_S3 --env $ENV

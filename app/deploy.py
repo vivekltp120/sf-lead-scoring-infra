@@ -9,7 +9,7 @@ asg = boto3.client("application-autoscaling")
 
 role = "arn:aws:iam::947288527335:role/sagemaker"
 model = SKLearnModel(
-    model_data="s3://salesforce_models/models/xgboost_model.tar.gz",
+    model_data="s3://salesforce-models/models/xgboost_model.tar.gz",
     role=role,
     entry_point="app/inference.py",
     framework_version="1.2-1",

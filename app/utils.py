@@ -2,6 +2,7 @@ from fastapi import Request
 import os, sys, json
 import logging
 import watchtower
+import boto3
 
 
 
@@ -17,8 +18,11 @@ def get_logger(service_name: str="sf-scoring", log_group: str = "/sf-lead-scorin
     logger.setLevel(logging.INFO)
 
     if not any(isinstance(h, watchtower.CloudWatchLogHandler) for h in logger.handlers):
-        handler = watchtower.CloudWatchLogHandler(log_group_name=log_group)
+
+        handler = watchtower.CloudWatchLogHandler(log_group_name=log_group,boto3_client=boto3.client("logs", region_name="us-east-1"))
         logger.addHandler(handler)
+        
+        handler = watchtower.CloudWatchLogHandler(log_group_name=log_group)
 
     return logger
 

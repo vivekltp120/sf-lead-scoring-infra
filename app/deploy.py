@@ -1,7 +1,7 @@
 # deploy.py
 import boto3, sagemaker, time
 from sagemaker.xgboost.model import XGBoostModel
-from utils import get_logger
+from .utils import get_logger
 logger = get_logger("deploy_service")
 
 sm = boto3.client("sagemaker")

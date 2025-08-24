@@ -12,20 +12,26 @@ resource "aws_iam_role" "lambda_exec" {
   })
 }
 
-resource "aws_lambda_function" "lead_scoring" {
-  function_name = "lead-scoring-lambda"
-  role          = aws_iam_role.lambda_exec.arn
-  handler       = "lambda_function.lambda_handler"
-  runtime       = "python3.9"
-
-  filename         = "lambda_package.zip"
-  source_code_hash = filebase64sha256("lambda_package.zip")
-
-  environment {
-    variables = {
-      SAGEMAKER_ENDPOINT = "lead-scoring-endpoint"
-    }
+resource "null_resource" "package_lambda" {
+  triggers = {
+    always_run = timestamp()
   }
+
+  provisioner "local-exec" {
+    command = "cd ${path.module}/lambda_code && zip -r ${path.module}/lambda_package.zip ."
+  }
+}
+
+resource "aws_lambda_function" "lead_scoring" {
+  function_name    = "lead_scorer"
+  role             = aws_iam_role.lambda_exec.arn
+  handler          = "app.handler"
+  runtime          = "python3.12"
+
+  filename         = "${path.module}/lambda_package.zip"
+  source_code_hash = filebase64sha256("${path.module}/lambda_package.zip")
+
+  depends_on = [null_resource.package_lambda]
 }
 
 resource "aws_apigatewayv2_api" "lead_scoring_api" {

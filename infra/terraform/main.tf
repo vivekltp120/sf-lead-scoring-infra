@@ -191,7 +191,7 @@ resource "aws_cloudwatch_metric_alarm" "high_latency" {
   threshold           = 1
   comparison_operator = "GreaterThanThreshold"
   dimensions = {
-    LoadBalancer = module.alb.this_lb_arn_suffix
+    LoadBalancer = module.alb.lb_arn_suffix
   }
 }
 

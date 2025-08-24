@@ -173,7 +173,11 @@ resource "aws_lb_listener_rule" "http_forward" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.api.arn
   }
-  condition { path_pattern { values = ["/*"] } }
+  condition { 
+    path_pattern { 
+    values = ["/*"]
+    }
+  }
 }
 
 # CloudWatch Alarms (example)
@@ -191,6 +195,4 @@ resource "aws_cloudwatch_metric_alarm" "high_latency" {
   }
 }
 
-output "alb_dns_name" {
-  value = module.alb.lb_dns_name
-}
+

@@ -11,7 +11,7 @@ role = "arn:aws:iam::947288527335:role/sagemaker"
 model = SKLearnModel(
     model_data="s3://smm-sagemaker/model/xgboost_model.tar.gz",
     role=role,
-    entry_point="inference.py",
+    entry_point="app/inference.py",
     framework_version="1.2-1",
 )
 

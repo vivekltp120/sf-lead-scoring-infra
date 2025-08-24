@@ -2,9 +2,9 @@ name: aws infra for lead scoring model
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature/* ]
   pull_request:
-    branches: [ main, develop, feature/* ]
+    branches: [ main ]
     
 
 jobs:
@@ -80,7 +80,7 @@ jobs:
 
   # Example deploy job (needs AWS OIDC configuration & env secrets)
   deploy-staging:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/feature/deploy_stagging'
     needs: build-test-scan
     runs-on: ubuntu-latest
     permissions:

@@ -61,7 +61,7 @@ jobs:
 
   # Example deploy job (needs AWS OIDC configuration & env secrets)
   deploy-staging:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/develop'
     needs: build-test-scan
     runs-on: ubuntu-latest
     permissions:

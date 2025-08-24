@@ -106,9 +106,9 @@ jobs:
           ECR_REPOSITORY: lead-scorer-api
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo "ECR_REGISTRY=[$ECR_REGISTRY]"
-          echo "ECR_REPOSITORY=[$ECR_REPOSITORY]"
-          echo "IMAGE_TAG=[$IMAGE_TAG]"
+          ECR_REGISTRY=$(echo $ECR_REGISTRY | xargs)
+          IMAGE_TAG=$(echo $IMAGE_TAG | xargs)
+          echo "Using: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

@@ -83,7 +83,7 @@ jobs:
     needs: build-test-scan
     runs-on: ubuntu-latest
     env: 
-      bucket: "smm-sagemaker/model"
+      bucket: "salesforce-models/models"
     strategy:
       matrix:
         env: [ dev ]

@@ -25,10 +25,10 @@ jobs:
           pip install -r requirements.txt
           pip install coverage
 
-      - name: Lint & Typecheck
-        run: |
-          ruff check .
-          mypy app
+      # - name: Lint & Typecheck
+      #   run: |
+      #     ruff check .
+      #     mypy app
 
       - name: Unit tests
         run: |

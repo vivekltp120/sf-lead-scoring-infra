@@ -4,11 +4,9 @@ from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_
 from fastapi.responses import Response
 from .model import ScoreRequest, ScoreResponse, ModelService
 from .utils import get_request_id
-app = FastAPI(title="Lead Scoring API", version="1.0.0")
 from .utils import get_logger
 import time
 
-logger = get_logger("app_main")
 
 
 
@@ -16,6 +14,8 @@ REQUEST_COUNT = Counter("requests_total", "Total requests", ["endpoint", "status
 LATENCY = Histogram("request_latency_seconds", "Latency", ["endpoint"])
 
 model_service = ModelService()
+app = FastAPI(title="Lead Scoring API", version="1.0.0")
+logger = get_logger("app_main")
 
 @app.middleware("http")
 async def metrics_middleware(request: Request, call_next):

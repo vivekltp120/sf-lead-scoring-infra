@@ -1,16 +1,16 @@
+import time
 from fastapi import FastAPI, HTTPException
 from fastapi import Request
-from pydantic import BaseModel, Field
-from typing import Dict, Any, Optional
-import time, os, json
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
-from fastapi.responses import Response, JSONResponse, PlainTextResponse
+from fastapi.responses import Response
 from loguru import logger
 from .model import ScoreRequest, ScoreResponse, ModelService
-from .utils import get_request_id, setup_logging
-
+from .utils import get_request_id
 app = FastAPI(title="Lead Scoring API", version="1.0.0")
-setup_logging()
+from .utils import get_logger
+logger = get_logger("app_main")
+
+
 
 REQUEST_COUNT = Counter("requests_total", "Total requests", ["endpoint", "status"])
 LATENCY = Histogram("request_latency_seconds", "Latency", ["endpoint"])

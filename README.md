@@ -28,11 +28,7 @@ docker run -p 8080:8080 lead-scoring-api:local
 
 Open: `http://localhost:8080/docs` for Swagger.
 
-Load test locally:
-```bash
-# Requires k6 installed locally
-k6 run load_test/k6-smoke.js
-```
+
 
 ---
 ## Load Testing with Locust
@@ -123,5 +119,4 @@ This repo shows a lightweight pattern for obtaining features or writing scored o
 - Advanced drift monitors and bias metrics with alerts to Slack (SNS)
 
 ---
-
 

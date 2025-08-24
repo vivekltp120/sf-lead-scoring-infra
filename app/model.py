@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Dict, Optional, Any
-import asyncio, math, os, json, time
-from loguru import logger
+import asyncio, math, os, time
+from .utils import get_logger
+logger = get_logger("model_service")
 
 # ---- Schemas ----
 class ScoreRequest(BaseModel):

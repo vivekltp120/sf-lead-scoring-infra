@@ -1,6 +1,9 @@
 # inference.py
 import os, json, joblib, numpy as np
 
+# A recommended filename for the XGBoost model within the tarball is 'xgboost_model.json'
+MODEL_FILENAME = 'xgboost_model.json'
+
 def model_fn(model_dir):
     path = os.path.join(model_dir, "model.pkl")
     return joblib.load(path)

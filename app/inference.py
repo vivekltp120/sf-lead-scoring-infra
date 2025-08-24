@@ -1,12 +1,15 @@
 # inference.py
 import os, json, joblib, numpy as np
+import xgboost as xgb
 
 # A recommended filename for the XGBoost model within the tarball is 'xgboost_model.json'
 MODEL_FILENAME = 'xgboost_model'
 
 def model_fn(model_dir):
     path = os.path.join(model_dir, MODEL_FILENAME)
-    return joblib.load(path)
+    booster = xgb.Booster()
+    booster.load_model(path)
+    return booster
 
 def input_fn(body, content_type):
     if content_type == "application/json":

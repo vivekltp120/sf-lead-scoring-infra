@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Dict, Optional, Any
-import asyncio, math, os, time
+import math, os, time
 from .utils import get_logger
 logger = get_logger("model_service")
 

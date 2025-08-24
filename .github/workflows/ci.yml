@@ -26,7 +26,7 @@ jobs:
           pip install coverage
       - name: Install aws-cli  
         run: |
-          curl -s "https://aws-cli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "aws-cli.zip"
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"  -o "aws-cli.zip"
           unzip aws-cli.zip 
           sudo ./aws/install --update
           rm -rf aws-cli.zip ./aws

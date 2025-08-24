@@ -117,7 +117,7 @@ jobs:
 
       - name: Deploy (autoscaled Realtime)
         env:
-          ARTIFACT_S3: s3://${{ env.bucket }}/model/${{ matrix.env }}/xgboost_model.tar.gz
+          ARTIFACT_S3: s3://${{ env.bucket }}/${{ matrix.env }}/xgboost_model.tar.gz
           ENV: ${{ matrix.env }}
         run: |
           python app/deploy.py --artifact $ARTIFACT_S3 --env $ENV

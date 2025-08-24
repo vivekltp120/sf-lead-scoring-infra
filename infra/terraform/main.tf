@@ -195,6 +195,4 @@ resource "aws_cloudwatch_metric_alarm" "high_latency" {
   }
 }
 
-output "alb_dns_name" {
-  value = module.alb.lb_dns_name
-}
+

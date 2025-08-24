@@ -1,7 +1,7 @@
 # inference.py
 import os, json, joblib, numpy as np
 import xgboost as xgb
-from .utils import get_logger
+from utils import get_logger
 logger = get_logger("inference")
 
 # A recommended filename for the XGBoost model within the tarball is 'xgboost_model.json'

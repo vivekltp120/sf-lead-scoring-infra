@@ -55,7 +55,7 @@ locust -f load_tests/locustfile.py --host http://localhost:8080
 - **Data Lake Writes**: Results are pushed asynchronously to **Kinesis Firehose -> S3** (parquet) with partitioning
 - **Features**: 50 features accepted; schema validated with **Pydantic**
 - **Observability**: 
-  - **Prometheus** metrics exposed (`/metrics`) + CloudWatch Container Insights
+  - **Cloudwatch** metrics exposed (`/metrics`) + CloudWatch Container Insights
   - **AWS X-Ray** tracing (enabled via SDK and sidecar/daemon)
   - **SageMaker Model Monitor** (template) for data/quality drift
 - **Security**:
@@ -69,9 +69,7 @@ See `docs/architecture.md` for the diagram and detailed choices.
 ## Endpoints
 
 - `POST /score` — returns a score 1–5 and latency metadata
-- `GET /healthz` — basic liveness
-- `GET /readyz` — readiness (includes model warm state)
-- `GET /metrics` — Prometheus metrics
+- `GET /metrics` — Cloudwatch metrics
 
 Sample request:
 ```json

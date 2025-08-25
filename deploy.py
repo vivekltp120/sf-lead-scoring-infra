@@ -13,7 +13,7 @@ model = XGBoostModel(
     model_data="s3://salesforce-models/models/xgboost_model.tar.gz",
     role=role,
     entry_point="src/inference.py",   # only if you have custom logic
-    framework_version="1.5-1"
+    framework_version="3.0.4"
 )
 
 

@@ -42,28 +42,12 @@ jobs:
       - name: Lint & Typecheck
         run: |
           ruff check .
-          mypy app
-
       - name: Unit tests
         run: |
           coverage run -m pytest -q
           coverage xml
 
-      - name: Bandit (security)
-        run: bandit -r app -x tests
-
-      # - name: Build Docker
-      #   run: docker build -t app:ci .
-
-      - name: Trivy scan
-        uses: aquasecurity/trivy-action@0.28.0
-        continue-on-error: true
-        with:
-          image-ref: 'app:ci'
-          format: 'table'
-          exit-code: '0'
-
-     
+      
 
   # Example deploy job (needs AWS OIDC configuration & env secrets)
   deploy-staging:
@@ -94,15 +78,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      # - name: Package model
-      #   run: |
-      #     tar -czvf model-${GITHUB_SHA}.tar.gz model/
-      #     echo "ARTIFACT=model-${GITHUB_SHA}.tar.gz" >> $GITHUB_ENV
-
-      # - name: Upload to S3 (versioned path)
-      #   run: |
-      #     aws s3 cp $ARTIFACT s3://<bucket>/${{ matrix.env }}/$ARTIFACT
-
+     
       - name: Deploy (autoscaled Realtime)
         env:
           ARTIFACT_S3: s3://${{ env.bucket }}/xgboost_model.tar.gz

@@ -1,5 +1,4 @@
 from fastapi import Request
-import os, sys, json
 import logging
 import watchtower
 import boto3

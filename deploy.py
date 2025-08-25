@@ -1,5 +1,6 @@
 # deploy.py
-import boto3, time
+import boto3
+import time
 from sagemaker.xgboost.model import XGBoostModel
 from src.utils import get_logger
 logger = get_logger("deploy_service")

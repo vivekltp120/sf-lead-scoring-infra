@@ -1,5 +1,5 @@
 # deploy.py
-import boto3, sagemaker, time
+import boto3, time
 from sagemaker.xgboost.model import XGBoostModel
 from utils import get_logger
 logger = get_logger("deploy_service")
@@ -12,7 +12,7 @@ role = "arn:aws:iam::947288527335:role/sagemaker"
 model = XGBoostModel(
     model_data="s3://salesforce-models/models/xgboost_model.tar.gz",
     role=role,
-    entry_point="app/inference.py",   # only if you have custom logic
+    entry_point="inference.py",   # only if you have custom logic
     framework_version="1.5-1"
 )
 

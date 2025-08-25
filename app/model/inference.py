@@ -1,7 +1,8 @@
 # inference.py
 import os, json, joblib, numpy as np
 import xgboost as xgb
-
+from utils import get_logger
+logger=get_logger("inference")
 
 # A recommended filename for the XGBoost model within the tarball is 'xgboost_model.json'
 MODEL_FILENAME = "xgboost_model.json"
@@ -11,7 +12,7 @@ def model_fn(model_dir):
     # For XGBClassifier
     booster = xgb.XGBClassifier()
     booster.load_model(path)
-    print("Model loaded from: ", path)
+    logger.info(f"Model loaded from: {path}")
     return booster
 
 def input_fn(body, content_type):

@@ -44,8 +44,7 @@ jobs:
           ruff check .
       - name: Unit tests
         run: |
-          coverage run -m pytest -q
-          coverage xml
+          pytest --cov=tests/ --cov-report=term-missing tests/
 
       
 

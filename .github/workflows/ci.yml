@@ -120,4 +120,4 @@ jobs:
           ARTIFACT_S3: s3://${{ env.bucket }}/xgboost_model.tar.gz
           ENV: ${{ matrix.env }}
         run: |
-          python app/deploy.py --artifact $ARTIFACT_S3 --env $ENV
+          python app/model/deploy.py --artifact $ARTIFACT_S3 --env $ENV

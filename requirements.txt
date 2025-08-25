@@ -1,7 +1,7 @@
 fastapi==0.112.1
 uvicorn==0.30.6
 pydantic==2.9.0
-sagemaker==2.251.0
+sagemaker==2.172.0
 xgboost==3.0.4
 pandas==2.2.3
 numpy==1.26.4

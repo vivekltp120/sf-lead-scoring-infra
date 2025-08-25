@@ -2,9 +2,9 @@ name: aws infra for lead scoring model
 
 on:
   push:
-    branches: [ main, feature/*,develop ]
+    branches: [ main]
   pull_request:
-    branches: [  ]
+    branches: [ main  ]
     
 
 jobs:

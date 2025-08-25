@@ -13,13 +13,12 @@ def model_fn(model_dir):
     booster.load_model(path)
     return booster
 
-# def input_fn(body, content_type):
-#     if content_type == "application/json":
-#         payload = json.loads(body)
-#         # Expect {"instances":[[...],[...]]}
-#         arr = np.asarray(payload["instances"], dtype=float)
-#         return arr
-#     raise ValueError(f"Unsupported content type: {content_type}")
+def input_fn(body, content_type):
+    if content_type == "application/json":
+        payload = json.loads(body)
+        arr = np.asarray(payload, dtype=float)
+        return arr
+    raise ValueError(f"Unsupported content type: {content_type}")
 
 def predict_fn(data, model):
     # For XGBClassifier

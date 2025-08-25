@@ -20,5 +20,6 @@ locust==2.39.0
 watchtower
 unzip   
 joblib
+inference
 # Optional locally; in AWS container image as needed
 # snowflake-connector-python

@@ -22,8 +22,7 @@ def input_fn(body, content_type):
 
 def predict_fn(data, model):
     # For XGBClassifier
-    input_data=np.array(data)
-    preds = model.predict_proba(input_data)
+    preds = model.predict_proba(data)
     return preds
 
 def output_fn(prediction, accept):

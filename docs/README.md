@@ -3,7 +3,7 @@
 
 This repo delivers a **production-quality** reference implementation for a real-time lead scoring system using **API Gateway** and **AWS Lambda**, model deployed on **Amazon SageMaker** endpoint with scalable instances and **Terraform** for IaC (not using due to resources constraint). It is designed to handle **~300 RPS** with **p99 < 1s** under typical payload sizes, and demonstrates best practices for **security, observability, CI/CD, testing, and MLOps**.
 
-# Assumption
+## Assumption
 - Assumption is that our model is ready to production hence created a dummy model in local
 - Data pipeline for all the sources is already there from which we are getting input features for the xgboost model
 
@@ -64,10 +64,6 @@ Sample request: (list of numpy arrays each of 50 feature)
 ```
 ---
 
-
-
-
-
 # High-Level Architecture
 
 - **Ingress**: AWS API Gateway + AWS Lambda (maintable,scalable and secure)
@@ -78,8 +74,8 @@ Sample request: (list of numpy arrays each of 50 feature)
 - **Data Lake Writes**: Results are pushed asynchronously to **Kinesis Firehose -> S3** (parquet) with partitioning (Future Implementation)
 - **Features**: 50 features accepted; schema validated with 
 - **Observability**: 
-  - **Cloudwatch** metrics exposed (`/metrics`) + CloudWatch Container Insights
-  - **SageMaker Model Monitor** (template) for data/quality drift (Future Implementation)
+  - **Cloudwatch** log ingested for execution
+  - **SageMaker Model Monitor** (template) for data/quality drift and concept drift(Future Implementation)
 - **Security**:
   - Secrets in **Github Repo**
 

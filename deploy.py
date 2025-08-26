@@ -20,7 +20,7 @@ model = XGBoostModel(
 
 
 
-endpoint_name = f"xgb-endpoint-{int(time.time())}"
+endpoint_name = f"xgb-endpoint-lead-score"
 logger.info(f"Deploying endpoint: {endpoint_name}")
 predictor = model.deploy(
     initial_instance_count=1,

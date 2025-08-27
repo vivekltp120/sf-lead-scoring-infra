@@ -6,7 +6,7 @@ import xgboost as xgb
 
 
 # A recommended filename for the XGBoost model within the tarball is 'xgboost_model.json'
-MODEL_FILENAME = "xgboost_model.json"
+MODEL_FILENAME = "xgboost-model"
 
 def model_fn(model_dir):
     path = os.path.join(model_dir, MODEL_FILENAME)

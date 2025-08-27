@@ -82,10 +82,9 @@ jobs:
      
       - name: Deploy (autoscaled Realtime)
         env:
-          ARTIFACT_S3: s3://${{ env.bucket }}/model.tar.gz
           ENV: ${{ matrix.env }}
         run: |
-          python deploy.py --artifact $ARTIFACT_S3 --env $ENV
+          python deploy.py 
       - name: Lambda Function Deployment 
         env:
           ENV: ${{ matrix.env }}

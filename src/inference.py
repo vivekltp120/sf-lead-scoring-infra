@@ -9,11 +9,13 @@ import xgboost as xgb
 MODEL_FILENAME = "xgboost-model"
 
 def model_fn(model_dir):
-    path = os.path.join(model_dir, MODEL_FILENAME)
+    model_path = os.path.join(model_dir, MODEL_FILENAME)
     # For XGBClassifier
-    booster = xgb.XGBClassifier()
-    booster.load_model(path)
+    booster = xgb.Booster()
+    booster.load_model(model_path)
     return booster
+    
+
 
 def input_fn(body, content_type):
     """
@@ -44,7 +46,8 @@ def input_fn(body, content_type):
 
 def predict_fn(data, model):
     # For XGBClassifier
-    preds = model.predict(data)
+    dmatrix = xgb.DMatrix(data)
+    preds = model.predict(dmatrix)
     return preds
 
 def output_fn(prediction, accept):

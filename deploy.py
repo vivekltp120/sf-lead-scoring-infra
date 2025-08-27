@@ -31,7 +31,7 @@ except sm.exceptions.ClientError:
 
 
 model = XGBoostModel(
-    model_name=model_name,
+    name=model_name,
     model_data="s3://salesforce-models/models/xgboost_model.tar.gz",
     role=role,
     entry_point="src/inference.py",   # only if you have custom logic

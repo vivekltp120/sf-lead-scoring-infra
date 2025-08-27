@@ -47,9 +47,13 @@ def input_fn(body, content_type):
 def predict_fn(data, model):
     # For XGBClassifier
     dmatrix = xgb.DMatrix(data)
-    probs = model.predict(dmatrix)
-    preds = np.argmax(probs, axis=1)
-    return preds
+    output = model.predict(dmatrix)
+    # Case 1: already labels (multi:softmax)
+    if output.ndim == 1:
+        return output.astype(int)
+    # Case 2: probabilities (multi:softprob)
+    return np.argmax(output, axis=1).astype(int)
+    
 
 def output_fn(prediction, accept):
     return json.dumps({"predictions": prediction.tolist()})

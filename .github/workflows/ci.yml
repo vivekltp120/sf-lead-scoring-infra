@@ -56,7 +56,7 @@ jobs:
     # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env: 
-      bucket: "salesforce-models/models"
+      bucket: "salesforce-models/xgboost-50features-5classes/models/"
     strategy:
       matrix:
         env: [ dev ]
@@ -82,7 +82,7 @@ jobs:
      
       - name: Deploy (autoscaled Realtime)
         env:
-          ARTIFACT_S3: s3://${{ env.bucket }}/xgboost_model.tar.gz
+          ARTIFACT_S3: s3://${{ env.bucket }}/model.tar.gz
           ENV: ${{ matrix.env }}
         run: |
           python deploy.py --artifact $ARTIFACT_S3 --env $ENV

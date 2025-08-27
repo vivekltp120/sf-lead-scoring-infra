@@ -10,3 +10,5 @@ terraform.tfstate*
 .tfplan
 .env
 *.log
+*.tar.gz
+*/.coverage

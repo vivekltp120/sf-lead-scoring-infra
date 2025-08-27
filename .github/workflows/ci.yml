@@ -52,7 +52,7 @@ jobs:
   # Example deploy job (needs AWS OIDC configuration & env secrets)
   deploy-staging:
     needs: build-test-scan
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env: 
       bucket: "salesforce-models/models"
@@ -85,3 +85,10 @@ jobs:
           ENV: ${{ matrix.env }}
         run: |
           python deploy.py --artifact $ARTIFACT_S3 --env $ENV
+      - name: Lambda Function Deployment 
+        env:
+          ENV: ${{ matrix.env }}
+        run: |
+          sh infra/deploy_lambda.sh 
+      
+

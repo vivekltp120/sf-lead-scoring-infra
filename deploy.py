@@ -74,4 +74,4 @@ asg.put_scaling_policy(
     },
 )
 
-logger.info("Deployed:", endpoint_name)
+logger.info("Deployed:{}".format(endpoint_name))

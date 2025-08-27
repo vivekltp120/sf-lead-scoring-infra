@@ -6,11 +6,13 @@ logger = get_logger("deploy_service")
 
 sm = boto3.client("sagemaker")
 asg = boto3.client("application-autoscaling")
-
-role = "arn:aws:iam::947288527335:role/sagemaker"
-
+iam = boto3.client("iam")
+role = iam.get_role(RoleName="sagemaker")["Role"]["Arn"]  # or replace with your IAM role ARN
+# define names
 endpoint_name = "xgb-lead-score-endpoint"
 model_name = "xgboost-lead-score-model"
+bucket = "salesforce-models"  # replace with your bucket name
+prefix = "xgboost-50features-5classes"
 # --- Cleanup old endpoint + config + model ---
 try:
     desc = sm.describe_endpoint(EndpointName=endpoint_name)
@@ -32,7 +34,7 @@ except sm.exceptions.ClientError:
 
 model = XGBoostModel(
     name=model_name,
-    model_data="s3://salesforce-models/models/xgboost_model.tar.gz",
+    model_data=f"s3://{bucket}/{prefix}/models/model.tar.gz",  # path to model artifact
     role=role,
     entry_point="src/inference.py",   # only if you have custom logic
     framework_version="1.7-1"
@@ -45,7 +47,6 @@ predictor = model.deploy(
     endpoint_name=endpoint_name,
     wait=True
 )
-logger.info(f"Endpoint in service: {endpoint_name}")
 
 # Register scaling target
 resource_id = f"endpoint/{endpoint_name}/variant/AllTraffic"

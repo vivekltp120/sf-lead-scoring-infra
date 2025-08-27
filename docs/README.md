@@ -37,7 +37,7 @@ make
 ```bash
 cd load_tests
 pip install -r requirements.txt
-locust -f load_tests/locustfile.py --host http://localhost:8080
+locust -f load_tests/locustfile.py --host <API Gateway Endpoint>
 
 ```
 

@@ -25,6 +25,7 @@ predictor = model.deploy(
     initial_instance_count=1,
     instance_type="ml.m5.large",
     endpoint_name=endpoint_name,
+    update_endpoint=True
 )
 logger.info(f"Endpoint in service: {endpoint_name}")
 

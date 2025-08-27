@@ -47,7 +47,8 @@ def input_fn(body, content_type):
 def predict_fn(data, model):
     # For XGBClassifier
     dmatrix = xgb.DMatrix(data)
-    preds = model.predict(dmatrix)
+    probs = model.predict(dmatrix)
+    preds = np.argmax(probs, axis=1)
     return preds
 
 def output_fn(prediction, accept):

@@ -16,21 +16,22 @@ try:
     desc = sm.describe_endpoint(EndpointName=endpoint_name)
     endpoint_config_name = desc["EndpointConfigName"]
 
-    print(f"Deleting old endpoint: {endpoint_name}")
+    logger.info(f"Deleting old endpoint: {endpoint_name}")
     sm.delete_endpoint(EndpointName=endpoint_name)
 
-    print(f"Deleting old endpoint config: {endpoint_config_name}")
+    logger.info(f"Deleting old endpoint config: {endpoint_config_name}")
     sm.delete_endpoint_config(EndpointConfigName=endpoint_config_name)
 
-    print(f"Deleting old model: {endpoint_name}")
+    logger.info(f"Deleting old model: {endpoint_name}")
     sm.delete_model(ModelName=endpoint_name)
 
 except sm.exceptions.ClientError:
-    print("No existing endpoint to clean up.")
+    logger.info("No existing endpoint to clean up.")
 
 
 
 model = XGBoostModel(
+    model_name=model_name,
     model_data="s3://salesforce-models/models/xgboost_model.tar.gz",
     role=role,
     entry_point="src/inference.py",   # only if you have custom logic
@@ -39,7 +40,6 @@ model = XGBoostModel(
 
 # Deploy the model to create a SageMaker endpoint
 predictor = model.deploy(
-    model_name="xgboost-lead-score-model",
     initial_instance_count=1,
     instance_type="ml.m5.large",
     endpoint_name=endpoint_name,
@@ -74,4 +74,4 @@ asg.put_scaling_policy(
     },
 )
 
-print("Deployed:", endpoint_name)
+logger.info("Deployed:", endpoint_name)

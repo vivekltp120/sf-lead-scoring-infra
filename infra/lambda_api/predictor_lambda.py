@@ -38,12 +38,16 @@ def lambda_handler(event, context):
     body = event.get("body",None)
     # If body is string → parse JSON
     logger.info("body-{0} type-{1}".format(body,type(body)))
+    if body is None:
+        logger.error("No body provided in the request")
+        return {
+            "statusCode": 400,
+            "body": json.dumps({
+                "error": "No body provided in the request"
+            })
+        }
     if isinstance(body, str):
         body = json.loads(body)
-    else:
-        logger.error("body-{0} type-{1}".format(body,type(body)))
-        return "No Valid Data Provided"    
-    
     # If body is already dict → leave as is
     data = body["input_data"]
     response = runtime.invoke_endpoint(

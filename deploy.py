@@ -21,6 +21,12 @@ model = XGBoostModel(
 
 endpoint_name = "xgb-endpoint-lead-score"
 logger.info(f"Deploying endpoint: {endpoint_name}")
+# delete endpoint config if it already exists
+try:
+    sm.delete_endpoint_config(EndpointConfigName=endpoint_name)
+except sm.exceptions.ClientError:
+    logger.info("No existing endpoint config to delete")
+
 predictor = model.deploy(
     initial_instance_count=1,
     instance_type="ml.m5.large",

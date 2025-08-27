@@ -30,6 +30,12 @@ logger.setLevel(logging.INFO) # Set desired log level (DEBUG, INFO, WARNING, ERR
 
 
 runtime = boto3.client("sagemaker-runtime")
+s3_client = boto3.client("s3")
+firehose = boto3.client("firehose")
+DELIVERY_STREAM = "inference-logs"
+
+
+
 SAGEMAKER_ENDPOINT = os.getenv("SAGEMAKER_ENDPOINT", "xgb-lead-score-endpoint")
 
 
@@ -58,11 +64,20 @@ def lambda_handler(event, context):
 
     result = json.loads(response["Body"].read().decode("utf-8"))
     logger.info(f"Prediction result: {result}")
+    # Log to Firehose
+    log_entry = {
+        "request_id": context.aws_request_id,
+        "input_data": data,
+        "prediction": result
+    }
+
+    firehose.put_record(
+        DeliveryStreamName=DELIVERY_STREAM,
+        Record={"Data": json.dumps(log_entry) + "\n"}
+    )
+
     return {
         "statusCode": 200,
-        "body": json.dumps({
-            "prediction": result,
-            "request_id": context.aws_request_id
-        })
+        "body": json.dumps(result)
     }
 

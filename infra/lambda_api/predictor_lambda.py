@@ -30,7 +30,7 @@ logger.setLevel(logging.INFO) # Set desired log level (DEBUG, INFO, WARNING, ERR
 
 
 runtime = boto3.client("sagemaker-runtime")
-SAGEMAKER_ENDPOINT = os.getenv("SAGEMAKER_ENDPOINT", "xgb-endpoint-lead-score")
+SAGEMAKER_ENDPOINT = os.getenv("SAGEMAKER_ENDPOINT", "xgb-lead-score-endpoint")
 
 
 

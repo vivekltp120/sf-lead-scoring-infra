@@ -9,7 +9,7 @@ class LeadScoringUser(HttpUser):
     @task
     def score_lead(self):
         # Example random payload with 50 features
-        num_samples = 1                 # Number of samples you want to predict
+        num_samples = 50                 # Number of samples you want to predict
         num_features = 50                     # Number of features per sample
 
       
@@ -19,6 +19,6 @@ class LeadScoringUser(HttpUser):
         lead_data={"input_data":data}        
         self.client.post(
             url= host_url,
-            body=json.dumps(lead_data),
+            data=json.dumps(lead_data),
             headers={"Content-Type": "application/json"}
         )

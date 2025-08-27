@@ -24,16 +24,15 @@ xgb = Estimator(
     instance_count=1,
     instance_type="ml.m5.large",
     volume_size=5,
-    max_run=3600,
     output_path=f"s3://{bucket}/{prefix}/models/",
     sagemaker_session=session,
 )
 
 # Hyperparameters for multi-class
 xgb.set_hyperparameters(
-    objective="multi:softprob",  # probability output for multi-class
+    objective="multi:softmax",  # probability output for multi-class
     num_class=5,                 # 5 classes
-    num_round=200,               # boosting rounds
+    num_round=20,               # boosting rounds
     max_depth=6,
     eta=0.2,
     gamma=4,
@@ -49,3 +48,6 @@ validation_input = TrainingInput(validation_path, content_type="text/csv")
 
 # Launch training
 xgb.fit({"train": train_input, "validation": validation_input})
+# s3_client = boto3.client("s3")
+print(xgb.model_data)
+

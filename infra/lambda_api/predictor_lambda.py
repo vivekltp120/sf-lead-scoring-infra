@@ -57,7 +57,7 @@ def lambda_handler(event, context):
     )
 
     result = json.loads(response["Body"].read().decode("utf-8"))
-
+    logger.info(f"Prediction result: {result}")
     return {
         "statusCode": 200,
         "body": json.dumps({

@@ -20,6 +20,10 @@ try:
 
     logger.info(f"Deleting old endpoint: {endpoint_name}")
     sm.delete_endpoint(EndpointName=endpoint_name)
+    # Wait until it is actually deleted
+    waiter = sm.get_waiter("endpoint_deleted")
+    waiter.wait(EndpointName=endpoint_name)
+    logger.info(f"Endpoint {endpoint_name} successfully deleted.")
 
     logger.info(f"Deleting old endpoint config: {endpoint_config_name}")
     sm.delete_endpoint_config(EndpointConfigName=endpoint_config_name)

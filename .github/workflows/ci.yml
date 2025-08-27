@@ -56,7 +56,7 @@ jobs:
     # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env: 
-      bucket: "salesforce-models/xgboost-50features-5classes/models/"
+      bucket: "s3://salesforce-models/xgboost-50features-5classes/models/"
     strategy:
       matrix:
         env: [ dev ]
@@ -82,9 +82,10 @@ jobs:
      
       - name: Deploy (autoscaled Realtime)
         env:
+          ARTIFACT_S3: s3://${{ env.bucket }}/model.tar.gz
           ENV: ${{ matrix.env }}
         run: |
-          python deploy.py 
+          python deploy.py --artifact $ARTIFACT_S3 --env $ENV
       - name: Lambda Function Deployment 
         env:
           ENV: ${{ matrix.env }}

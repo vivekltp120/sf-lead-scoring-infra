@@ -24,21 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install coverage
-      # - name: Install aws-cli  
-      #   run: |
-      #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"  -o "aws-cli.zip"
-      #     unzip aws-cli.zip 
-      #     sudo ./aws/install --update
-      #     rm -rf aws-cli.zip ./aws
-      # - name: Set up AWS credentials
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #   run: |
-      #     aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-      #     aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-      #     aws configure set default.region us-east-1    
-
+     
       - name: Lint & Typecheck
         run: |
           ruff check . --fix

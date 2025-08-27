@@ -47,6 +47,9 @@ locust -f load_tests/locustfile.py --host <API Gateway Endpoint>
   - Lint (`ruff`), type-check (`mypy`), unit tests (`pytest`, coverage)
   - Security: `bandit` (py)
   - Deployment and creation of sagemaker endpoint for xgboost model
+  - Implement the lambda function in this stage
+  - Terraform (deferred for future)
+- **Environments**: 
   - **staging** on main branch; manual approval for **prod**
 
 
@@ -99,7 +102,8 @@ Sample request: (list of numpy arrays each of 50 feature)
 
 - Advanced drift monitors and bias metrics with alerts to Slack (SNS)
 - Terraform for various cloud like gcp and on-prem
-- Automate the complete MLOps life cycle - Auto Retraining, Auto Feature Engineering, Beta Testing, 
-
+- Automate the complete MLOps life cycle - Auto Retraining, Auto Feature Engineering, Beta Testing
+- Deep Learning Model , Transformer , Fine-tuning through SageMaker
+- A/B testing with multiple model versions
 ---
 

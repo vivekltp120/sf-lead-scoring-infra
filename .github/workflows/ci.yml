@@ -90,6 +90,8 @@ jobs:
         env:
           ENV: ${{ matrix.env }}
         run: |
-          sh infra/deploy_lambda.sh 
+          # bash infra/lambda_api/deploy_lambda.sh dev
+          cd infra/lambda_api
+          sh deploy_lambda.sh 
       
 

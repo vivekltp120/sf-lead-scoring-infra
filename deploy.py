@@ -1,6 +1,5 @@
 # deploy.py
 import boto3
-import time
 from sagemaker.xgboost.model import XGBoostModel
 from src.utils import get_logger
 logger = get_logger("deploy_service")
@@ -20,7 +19,7 @@ model = XGBoostModel(
 
 
 
-endpoint_name = f"xgb-endpoint-lead-score"
+endpoint_name = "xgb-endpoint-lead-score"
 logger.info(f"Deploying endpoint: {endpoint_name}")
 predictor = model.deploy(
     initial_instance_count=1,
